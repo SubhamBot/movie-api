@@ -24,3 +24,11 @@ Before running this project, ensure you have the following installed:
    ```bash
    git clone https://github.com/yourusername/movie-api.git
    cd movie-api
+2. ** Install dependencies: Install the required packages using pip**:
+   ```bash
+   pip install -r requirements.txt
+3.**Run the application: Start the Flask development server**:
+   ```bash
+   python app.py
+
+
