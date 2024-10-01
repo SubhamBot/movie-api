@@ -30,5 +30,14 @@ Before running this project, ensure you have the following installed:
 3.**Run the application: Start the Flask development server**:
    ```bash
    python app.py
+## API Endpoints
 
+### 1. Upload Movie Data (CSV)
+- **URL**: `/upload`
+- **Method**: `POST`
+- **Description**: Uploads a CSV file containing movie data to the database.
+
+#### Request Example:
+```bash
+curl -F "file=@movies.csv" http://127.0.0.1:5000/uploa
 
