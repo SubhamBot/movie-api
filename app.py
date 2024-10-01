@@ -10,7 +10,7 @@ app.config.from_object('config.Config')
 
 db = SQLAlchemy(app)
 
-# Define your database model
+
 class Data(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     budget = db.Column(db.Integer)
@@ -42,21 +42,21 @@ def index():
 def get_data():
     try:
         # Get filter parameters from the request
-        year = request.args.get('year', type=int)  # Extracted year for filtering
-        language = request.args.get('language', type=str)  # Language for filtering
+        year = request.args.get('year', type=int)
+        language = request.args.get('language', type=str)
 
         # Get pagination parameters (default values for page and per_page)
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
 
-        # Base query
+        
         query = Data.query
 
-        # Apply year filter if provided
+    
         if year:
             query = query.filter(extract('year', Data.release_date) == year)
 
-        # Apply language filter if provided
+        
         if language:
             query = query.filter(Data.original_language == language)
 
@@ -66,7 +66,7 @@ def get_data():
         # Paginate the results
         paginated_data = query.paginate(page=page, per_page=per_page)
 
-        # Serialize the data
+        
         data_list = []
         for entry in paginated_data.items:
             data_list.append({
@@ -88,7 +88,7 @@ def get_data():
                 'languages': entry.languages
             })
 
-        # Include pagination metadata
+        
         return jsonify({
             'data': data_list,
             'total': paginated_data.total,
@@ -104,15 +104,15 @@ def get_data():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    file = request.files.get('file')  # Get the uploaded file
+    file = request.files.get('file') 
 
     if file and file.filename.endswith('.csv'):
         try:
-            # Read CSV file into pandas DataFrame and clean column names
+           
             data = pd.read_csv(file)
-            data.columns = data.columns.str.strip().str.lower()  # Clean column names
+            data.columns = data.columns.str.strip().str.lower() 
             
-            # Loop through each row and insert into the database
+            
             for index, row in data.iterrows():
                 new_entry = Data(
                     budget=row.get('budget', 0),
@@ -133,7 +133,7 @@ def upload_file():
                 )
                 db.session.add(new_entry)
 
-            db.session.commit()  # Save changes to the database
+            db.session.commit() 
             return "Data uploaded successfully!"
         
         except IntegrityError as e:
@@ -154,5 +154,5 @@ def upload_file():
 if __name__ == '__main__':
     with app.app_context():
         db.drop_all()
-        db.create_all()  # Create tables if not exists
+        db.create_all()  
     app.run(debug=True)
